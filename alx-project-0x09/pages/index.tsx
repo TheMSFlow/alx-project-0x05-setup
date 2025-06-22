@@ -14,10 +14,27 @@ const Home: React.FC = () => {
 
 
  const handleGenerateImage = async () => {
-    console.log("Generating Image")
-    console.log(process.env.NEXT_PUBLIC_GPT_API_KEY)
-  }
+    setIsLoading(true);
+    const resp = await fetch('/api/generate-image', {
+      method: 'POST',
+      body: JSON.stringify({
+        prompt
+      }),
+      headers: {
+        'Content-type': 'application/json'
+      }
+    })
 
+
+    if (!resp.ok) {
+      setIsLoading(false)
+      return;
+    }
+
+    const data = await resp.json()
+    setIsLoading(false)
+  };
+  
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-100 p-4">
       <div className="flex flex-col items-center">
